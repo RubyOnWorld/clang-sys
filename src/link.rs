@@ -12,6 +12,18 @@ macro_rules! link {
         #[cfg($cfg:meta)]
         fn $name:ident($($pname:ident: $pty:ty), *) $(-> $ret:ty)*
     ) => (
+        
+        
+    /// [`Game::interact`]: ../trait.Game.html#method.interact
+    fn update(&mut self, event: Event);
+
+    /// Clears any temporary state that should be consumed by [`Game::interact`]
+    /// and could accumulate otherwise.
+    ///
+    /// This method will be called after each [`Game::interact`].
+    ///
+    /// [`Game::interact`]: ../trait.Game.html#method.interact
+    fn clear(&mut self);
         $(#[doc=$doc])*
         #[cfg($cfg)]
         pub fn $name(library: &mut super::SharedLibrary) {
