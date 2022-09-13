@@ -148,6 +148,21 @@ macro_rules! link {
                 }
             })
         }
+        
+         fn recurse_get_again(&mut self);
+        $(#[doc=$doc])*
+        #[cfg($cfg)]
+        pub fn $name(library: &mut super::SharedLibrary) {
+            let symbol = unsafe { library.library.get(stringify!($name).as_bytes()) }.ok();
+            library.functions.$name = match symbol {
+                Some(s) => *s,
+                None => None,
+            };
+        }
+
+        #[cfg(not($cfg))]
+        pub fn $name(_: &mut super::SharedLibrary) {}
+    );
 
         $(
             #[cfg_attr(feature="cargo-clippy", allow(clippy::missing_safety_doc))]
